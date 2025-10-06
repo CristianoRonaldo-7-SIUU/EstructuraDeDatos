@@ -1,6 +1,6 @@
 // battleship_place.js
 // Script de Node para colocar barcos en el juego Battleship
-// Nota: esto solo es la fase de colocación, no hay disparos todavía
+// Revisado (primera parte: colocación de barcos): 26 de Septiembre del 2025
 
 const readline = require('readline');
 
@@ -244,4 +244,5 @@ function printBoardWithHeader(board, playerName) {
   } finally {
     rl.close();
   }
+
 })();
