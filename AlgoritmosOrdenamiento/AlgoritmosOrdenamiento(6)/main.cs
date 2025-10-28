@@ -1,176 +1,212 @@
 using System;
-using System.Diagnostics;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 
 class Program {
-    // ------------------ BUBBLE SORT ------------------
-    static void BubbleSort(int[] arr, char order) {
-        for (int i = 0; i < arr.Length - 1; i++) {
-            for (int j = 0; j < arr.Length - 1 - i; j++) {
-                if ((order == 'a' && arr[j] > arr[j + 1]) || (order == 'd' && arr[j] < arr[j + 1])) {
-                    int tmp = arr[j]; arr[j] = arr[j + 1]; arr[j + 1] = tmp;
-                }
-            }
-        }
+    // -------------------------- UTIL --------------------------
+    static void PrintList(List<int> v) {
+        Console.WriteLine(string.Join(" ", v));
     }
 
-    // ------------------ SELECTION SORT ------------------
-    static void SelectionSort(int[] arr, char order) {
-        for (int i = 0; i < arr.Length - 1; i++) {
+    // -------------------------- BUBBLE --------------------------
+    static void BubbleSort(List<int> arr, char order) {
+        int n = arr.Count;
+        for (int i = 0; i + 1 < n; ++i)
+            for (int j = 0; j + 1 < n - i; ++j)
+                if ((order == 'a' && arr[j] > arr[j+1]) || (order == 'd' && arr[j] < arr[j+1]))
+                    (arr[j], arr[j+1]) = (arr[j+1], arr[j]);
+    }
+
+    // -------------------------- SELECTION --------------------------
+    static void SelectionSort(List<int> arr, char order) {
+        int n = arr.Count;
+        for (int i = 0; i + 1 < n; ++i) {
             int idx = i;
-            for (int j = i + 1; j < arr.Length; j++) {
-                if ((order == 'a' && arr[j] < arr[idx]) || (order == 'd' && arr[j] > arr[idx])) idx = j;
-            }
+            for (int j = i+1; j < n; ++j)
+                if ((order=='a' && arr[j] < arr[idx]) || (order=='d' && arr[j] > arr[idx]))
+                    idx = j;
             if (idx != i) {
                 int tmp = arr[i]; arr[i] = arr[idx]; arr[idx] = tmp;
             }
         }
     }
 
-    // ------------------ INSERTION SORT ------------------
-    static void InsertionSort(int[] arr, char order) {
-        for (int i = 1; i < arr.Length; i++) {
+    // -------------------------- INSERTION --------------------------
+    static void InsertionSort(List<int> arr, char order) {
+        int n = arr.Count;
+        for (int i = 1; i < n; ++i) {
             int key = arr[i];
             int j = i - 1;
-            while (j >= 0 && ((order == 'a' && arr[j] > key) || (order == 'd' && arr[j] < key))) {
-                arr[j + 1] = arr[j];
+            while (j >= 0 && ((order=='a' && arr[j] > key) || (order=='d' && arr[j] < key))) {
+                arr[j+1] = arr[j];
                 j--;
             }
-            arr[j + 1] = key;
+            arr[j+1] = key;
         }
     }
 
-    // ------------------ QUICK SORT ------------------
-    static int[] QuickSort(int[] arr, char order) {
-        if (arr.Length <= 1) return arr;
-        int pivot = arr[arr.Length / 2];
+    // -------------------------- QUICK (devuelve lista nueva) --------------------------
+    static List<int> QuickSort(List<int> arr, char order) {
+        if (arr.Count <= 1) return new List<int>(arr);
+        Random r = new Random();
+        int pivot = arr[r.Next(arr.Count)];
         var left = new List<int>();
         var middle = new List<int>();
         var right = new List<int>();
-
-        foreach (int x in arr) {
+        foreach (var x in arr) {
             if (x == pivot) middle.Add(x);
-            else if ((order == 'a' && x < pivot) || (order == 'd' && x > pivot)) left.Add(x);
+            else if ((order=='a' && x < pivot) || (order=='d' && x > pivot)) left.Add(x);
             else right.Add(x);
         }
-
-        int[] l = QuickSort(left.ToArray(), order);
-        int[] r = QuickSort(right.ToArray(), order);
-        int[] result = new int[l.Length + middle.Count + r.Length];
-        int idx = 0;
-        foreach (int x in l) result[idx++] = x;
-        foreach (int x in middle) result[idx++] = x;
-        foreach (int x in r) result[idx++] = x;
-        return result;
+        var L = QuickSort(left, order);
+        var R = QuickSort(right, order);
+        var res = new List<int>(L);
+        res.AddRange(middle);
+        res.AddRange(R);
+        return res;
     }
 
-    // ------------------ MERGE SORT ------------------
-    static void MergeSort(int[] arr, char order) {
-        MergeSortRecursive(arr, 0, arr.Length - 1, order);
+    // -------------------------- MERGE (devuelve lista nueva) --------------------------
+    static List<int> Merge(List<int> a, List<int> b, char order) {
+        var r = new List<int>();
+        int i = 0, j = 0;
+        while (i < a.Count && j < b.Count) {
+            if ((order=='a' && a[i] <= b[j]) || (order=='d' && a[i] >= b[j])) r.Add(a[i++]);
+            else r.Add(b[j++]);
+        }
+        while (i < a.Count) r.Add(a[i++]);
+        while (j < b.Count) r.Add(b[j++]);
+        return r;
     }
 
-    static void MergeSortRecursive(int[] arr, int left, int right, char order) {
-        if (left < right) {
-            int mid = (left + right) / 2;
-            MergeSortRecursive(arr, left, mid, order);
-            MergeSortRecursive(arr, mid + 1, right, order);
-            Merge(arr, left, mid, right, order);
+    static List<int> MergeSort(List<int> arr, char order) {
+        if (arr.Count <= 1) return new List<int>(arr);
+        int mid = arr.Count / 2;
+        var left = MergeSort(arr.GetRange(0, mid), order);
+        var right = MergeSort(arr.GetRange(mid, arr.Count - mid), order);
+        return Merge(left, right, order);
+    }
+
+    // -------------------------- HEAP --------------------------
+    static void Heapify(List<int> arr, int n, int i) {
+        int largest = i;
+        int l = 2*i + 1;
+        int r = 2*i + 2;
+        if (l < n && arr[l] > arr[largest]) largest = l;
+        if (r < n && arr[r] > arr[largest]) largest = r;
+        if (largest != i) {
+            int tmp = arr[i]; arr[i] = arr[largest]; arr[largest] = tmp;
+            Heapify(arr, n, largest);
         }
     }
 
-    static void Merge(int[] arr, int left, int mid, int right, char order) {
-        int n1 = mid - left + 1;
-        int n2 = right - mid;
-        int[] L = new int[n1];
-        int[] R = new int[n2];
-
-        for (int i = 0; i < n1; i++) L[i] = arr[left + i];
-        for (int j = 0; j < n2; j++) R[j] = arr[mid + 1 + j];
-
-        int iL = 0, iR = 0, k = left;
-
-        while (iL < n1 && iR < n2) {
-            if ((order == 'a' && L[iL] <= R[iR]) || (order == 'd' && L[iL] >= R[iR])) {
-                arr[k++] = L[iL++];
-            } else {
-                arr[k++] = R[iR++];
-            }
+    static void HeapSort(List<int> arr, char order) {
+        int n = arr.Count;
+        for (int i = n/2 - 1; i >= 0; --i) Heapify(arr, n, i);
+        for (int i = n - 1; i > 0; --i) {
+            int tmp = arr[0]; arr[0] = arr[i]; arr[i] = tmp;
+            Heapify(arr, i, 0);
         }
-
-        while (iL < n1) arr[k++] = L[iL++];
-        while (iR < n2) arr[k++] = R[iR++];
+        if (order == 'd') arr.Reverse();
     }
 
-    // ------------------ HEAP SORT ------------------
-    static void HeapSort(int[] arr, char order) {
-        int n = arr.Length;
-
-        for (int i = n / 2 - 1; i >= 0; i--)
-            Heapify(arr, n, i, order);
-
-        for (int i = n - 1; i > 0; i--) {
-            int temp = arr[0];
-            arr[0] = arr[i];
-            arr[i] = temp;
-            Heapify(arr, i, 0, order);
-        }
+    // -------------------------- HASH SORT --------------------------
+    static List<int> HashSort(List<int> arr, char order) {
+        var freq = new Dictionary<int,int>();
+        foreach (var x in arr) freq[x] = freq.GetValueOrDefault(x,0) + 1;
+        var keys = freq.Keys.ToList();
+        keys.Sort((a,b) => order=='a' ? a.CompareTo(b) : b.CompareTo(a));
+        var res = new List<int>();
+        foreach (var k in keys) for (int i=0;i<freq[k];++i) res.Add(k);
+        return res;
     }
 
-    static void Heapify(int[] arr, int n, int i, char order) {
-        int extreme = i;
-        int left = 2 * i + 1;
-        int right = 2 * i + 2;
-
-        if (order == 'a') {
-            if (left < n && arr[left] > arr[extreme]) extreme = left;
-            if (right < n && arr[right] > arr[extreme]) extreme = right;
-        } else {
-            if (left < n && arr[left] < arr[extreme]) extreme = left;
-            if (right < n && arr[right] < arr[extreme]) extreme = right;
+    // -------------------------- BUCKET SORT --------------------------
+    static List<int> BucketSort(List<int> arr, char order) {
+        if (arr.Count == 0) return new List<int>(arr);
+        int maxv = arr.Max();
+        int minv = arr.Min();
+        if (maxv == minv) return new List<int>(arr);
+        int n = arr.Count;
+        double range = (double)(maxv - minv + 1);
+        int bucketCount = n;
+        var buckets = new List<List<int>>(new List<int>[bucketCount]);
+        for (int i = 0; i < bucketCount; ++i) buckets[i] = new List<int>();
+        foreach (int x in arr) {
+            int idx = (int)((double)(x - minv) * (bucketCount - 1) / (range - 1));
+            buckets[idx].Add(x);
         }
-
-        if (extreme != i) {
-            int swap = arr[i];
-            arr[i] = arr[extreme];
-            arr[extreme] = swap;
-            Heapify(arr, n, extreme, order);
+        var res = new List<int>();
+        foreach (var b in buckets) {
+            var copy = new List<int>(b);
+            InsertionSort(copy, 'a');
+            res.AddRange(copy);
         }
+        if (order == 'd') res.Reverse();
+        return res;
     }
 
-    // ------------------ MAIN ------------------
+    // -------------------------- RADIX SORT --------------------------
+    static void CountingSortForRadix(List<int> arr, int exp) {
+        int n = arr.Count;
+        var output = new int[n];
+        var count = new int[10];
+        for (int i = 0; i < n; ++i) count[(arr[i]/exp) % 10]++;
+        for (int i = 1; i < 10; ++i) count[i] += count[i-1];
+        for (int i = n-1; i >= 0; --i) {
+            int idx = (arr[i]/exp) % 10;
+            output[count[idx]-1] = arr[i];
+            count[idx]--;
+        }
+        for (int i = 0; i < n; ++i) arr[i] = output[i];
+    }
+
+    static void RadixSort(List<int> arr, char order) {
+        if (arr.Count == 0) return;
+        int minv = arr.Min();
+        if (minv < 0) for (int i=0;i<arr.Count;++i) arr[i] -= minv;
+        int maxv = arr.Max();
+        for (int exp = 1; maxv/exp > 0; exp *= 10) CountingSortForRadix(arr, exp);
+        if (minv < 0) for (int i=0;i<arr.Count;++i) arr[i] += minv;
+        if (order == 'd') arr.Reverse();
+    }
+
+    // -------------------------- MAIN --------------------------
     static void Main() {
+        var rnd = new Random();
         Console.Write("¿Cuántos números deseas generar?: ");
-        int n = int.Parse(Console.ReadLine());
+        if (!int.TryParse(Console.ReadLine(), out int n) || n < 0) return;
         Console.Write("Número límite: ");
-        int limit = int.Parse(Console.ReadLine());
+        if (!int.TryParse(Console.ReadLine(), out int limit) || limit <= 0) limit = 1;
+        var arr = new List<int>();
+        for (int i=0;i<n;++i) arr.Add(rnd.Next(1, limit+1));
+        Console.WriteLine("\nArray generado:");
+        PrintList(arr);
 
-        Random rand = new Random();
-        int[] arr = new int[n];
-        for (int i = 0; i < n; i++) arr[i] = rand.Next(1, limit + 1);
-
-        Console.WriteLine("Array generado:");
-        Console.WriteLine(string.Join(" ", arr));
-
-        Console.Write("Algoritmo: 1-Bubble 2-Selection 3-Insertion 4-Quick 5-Merge 6-Heap: ");
-        int choice = int.Parse(Console.ReadLine());
+        Console.WriteLine("\nAlgoritmos disponibles:");
+        Console.WriteLine("1-Bubble  2-Selection  3-Insertion  4-Quick  5-Merge  6-Heap");
+        Console.WriteLine("7-Hash  8-Bucket  9-Radix");
+        Console.Write("Elige algoritmo (1-9): ");
+        int choice = int.Parse(Console.ReadLine() ?? "0");
         Console.Write("Orden ascendente(a) o descendente(d): ");
-        char order = Console.ReadLine()[0];
+        char order = (Console.ReadLine() ?? "a").ToLower()[0];
 
-        Stopwatch sw = new Stopwatch();
-        sw.Start();
-
+        var sw = Stopwatch.StartNew();
         if (choice == 1) BubbleSort(arr, order);
         else if (choice == 2) SelectionSort(arr, order);
         else if (choice == 3) InsertionSort(arr, order);
         else if (choice == 4) arr = QuickSort(arr, order);
-        else if (choice == 5) MergeSort(arr, order);
+        else if (choice == 5) arr = MergeSort(arr, order);
         else if (choice == 6) HeapSort(arr, order);
+        else if (choice == 7) arr = HashSort(arr, order);
+        else if (choice == 8) arr = BucketSort(arr, order);
+        else if (choice == 9) { RadixSort(arr, order); }
         else Console.WriteLine("Opción inválida");
 
         sw.Stop();
-
-        Console.WriteLine($"Tiempo de ejecución: {sw.Elapsed.TotalSeconds} s");
+        Console.WriteLine($"\nTiempo de ejecución: {sw.Elapsed.TotalSeconds:F6} s");
         Console.WriteLine("Array ordenado:");
-        Console.WriteLine(string.Join(" ", arr));
+        PrintList(arr);
     }
 }
