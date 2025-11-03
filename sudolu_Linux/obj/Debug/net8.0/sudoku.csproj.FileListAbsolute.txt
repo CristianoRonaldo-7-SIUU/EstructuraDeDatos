@@ -1,0 +1,14 @@
+/home/khabib/Desktop/sudolu_Linux/obj/Debug/net8.0/sudoku.GeneratedMSBuildEditorConfig.editorconfig
+/home/khabib/Desktop/sudolu_Linux/obj/Debug/net8.0/sudoku.AssemblyInfoInputs.cache
+/home/khabib/Desktop/sudolu_Linux/obj/Debug/net8.0/sudoku.AssemblyInfo.cs
+/home/khabib/Desktop/sudolu_Linux/obj/Debug/net8.0/sudoku.csproj.CoreCompileInputs.cache
+/home/khabib/Desktop/sudolu_Linux/bin/Debug/net8.0/sudoku
+/home/khabib/Desktop/sudolu_Linux/bin/Debug/net8.0/sudoku.deps.json
+/home/khabib/Desktop/sudolu_Linux/bin/Debug/net8.0/sudoku.runtimeconfig.json
+/home/khabib/Desktop/sudolu_Linux/bin/Debug/net8.0/sudoku.dll
+/home/khabib/Desktop/sudolu_Linux/bin/Debug/net8.0/sudoku.pdb
+/home/khabib/Desktop/sudolu_Linux/obj/Debug/net8.0/sudoku.dll
+/home/khabib/Desktop/sudolu_Linux/obj/Debug/net8.0/refint/sudoku.dll
+/home/khabib/Desktop/sudolu_Linux/obj/Debug/net8.0/sudoku.pdb
+/home/khabib/Desktop/sudolu_Linux/obj/Debug/net8.0/sudoku.genruntimeconfig.cache
+/home/khabib/Desktop/sudolu_Linux/obj/Debug/net8.0/ref/sudoku.dll
