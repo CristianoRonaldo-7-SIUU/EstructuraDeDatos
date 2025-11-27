@@ -1,0 +1,207 @@
+//Lista Circular Simple (Circular)
+#ifndef CIRCULAR_H
+#define CIRCULAR_H
+
+#include <iostream>
+#include <stdlib.h>
+
+using namespace std;
+
+namespace Circular {
+
+    struct node {
+        int data;
+        struct node *next;
+    };
+
+    struct node *head = NULL;
+
+    void beginsert() {
+        struct node *ptr, *temp;
+        int item;
+        ptr = (struct node *)malloc(sizeof(struct node));
+        if(ptr == NULL) {
+            cout << "\nDESBORDAMIENTO";
+        } else {
+            cout << "\nValor: ";
+            cin >> item;
+            ptr->data = item;
+            if(head == NULL) {
+                head = ptr;
+                ptr->next = head;
+            } else {
+                temp = head;
+                while(temp->next != head) temp = temp->next;
+                ptr->next = head;
+                temp->next = ptr;
+                head = ptr;
+            }
+            cout << "\nNodo insertado";
+        }
+    }
+
+    void lastinsert() {
+        struct node *ptr, *temp;
+        int item;
+        ptr = (struct node *)malloc(sizeof(struct node));
+        if(ptr == NULL) {
+            cout << "\nDESBORDAMIENTO";
+        } else {
+            cout << "\nValor: ";
+            cin >> item;
+            ptr->data = item;
+            if(head == NULL) {
+                head = ptr;
+                ptr->next = head;
+            } else {
+                temp = head;
+                while(temp->next != head) temp = temp->next;
+                temp->next = ptr;
+                ptr->next = head;
+            }
+            cout << "\nNodo insertado";
+        }
+    }
+
+    void randominsert() {
+        struct node *ptr, *temp;
+        int item, loc, i;
+        ptr = (struct node *)malloc(sizeof(struct node));
+        if(ptr == NULL) {
+            cout << "\nDESBORDAMIENTO";
+        } else {
+            cout << "\nValor: ";
+            cin >> item;
+            ptr->data = item;
+            cout << "\nInsertar despues de posicion: ";
+            cin >> loc;
+            temp = head;
+            for(i=0; i<loc; i++) {
+                temp = temp->next;
+                if(temp == head) {
+                    cout << "\nNo se puede insertar";
+                    return;
+                }
+            }
+            ptr->next = temp->next;
+            temp->next = ptr;
+            cout << "\nNodo insertado";
+        }
+    }
+
+    void begin_delete() {
+        struct node *ptr;
+        if(head == NULL) {
+            cout << "\nLista vacia";
+        } else if(head->next == head) {
+            head = NULL;
+            free(head);
+            cout << "\nNodo eliminado";
+        } else {
+            ptr = head;
+            while(ptr->next != head) ptr = ptr->next;
+            ptr->next = head->next;
+            free(head);
+            head = ptr->next;
+            cout << "\nNodo eliminado del principio";
+        }
+    }
+
+    void last_delete() {
+        struct node *ptr, *preptr;
+        if(head == NULL) {
+            cout << "\nLista vacia";
+        } else if(head->next == head) {
+            head = NULL;
+            free(head);
+            cout << "\nNodo eliminado";
+        } else {
+            ptr = head;
+            while(ptr->next != head) {
+                preptr = ptr;
+                ptr = ptr->next;
+            }
+            preptr->next = head;
+            free(ptr);
+            cout << "\nNodo eliminado del final";
+        }
+    }
+
+    void random_delete() {
+        struct node *ptr, *preptr;
+        int loc, i;
+        cout << "\nPosicion a eliminar: ";
+        cin >> loc;
+        ptr = head;
+        if(ptr == NULL) return;
+        for(i=0; i<loc; i++) {
+            preptr = ptr;
+            ptr = ptr->next;
+            if(ptr == head) {
+                cout << "\nNo se puede eliminar";
+                return;
+            }
+        }
+        preptr->next = ptr->next;
+        free(ptr);
+        cout << "\nNodo eliminado en posicion " << loc;
+    }
+
+    void search() {
+        struct node *ptr;
+        int item, i=0, flag=1;
+        ptr = head;
+        if(ptr == NULL) {
+            cout << "\nLista vacia";
+        } else {
+            cout << "\nBuscar elemento: ";
+            cin >> item;
+            do {
+                if(ptr->data == item) {
+                    cout << "\nEncontrado en ubicacion " << i+1;
+                    flag = 0;
+                }
+                i++;
+                ptr = ptr->next;
+            } while(ptr != head);
+            if(flag) cout << "\nNo encontrado";
+        }
+    }
+
+    void display() {
+        struct node *ptr;
+        ptr = head;
+        if(head == NULL) {
+            cout << "\nNada que imprimir";
+        } else {
+            cout << "\nImprimiendo valores . . . . .\n";
+            do {
+                cout << "\n" << ptr->data;
+                ptr = ptr->next;
+            } while(ptr != head);
+        }
+    }
+
+    void runMenu() {
+        int choice = 0;
+        while(choice != 9) {
+            cout << "\n\n*** MENU CIRCULAR ***\n";
+            cout << "1.Insertar inicio\n2.Insertar final\n3.Insertar aleatorio\n4.Eliminar inicio\n5.Eliminar final\n6.Eliminar aleatorio\n7.Buscar\n8.Mostrar\n9.Volver\n";
+            cout << "Opcion: ";
+            cin >> choice;
+            switch(choice) {
+                case 1: beginsert(); break;
+                case 2: lastinsert(); break;
+                case 3: randominsert(); break;
+                case 4: begin_delete(); break;
+                case 5: last_delete(); break;
+                case 6: random_delete(); break;
+                case 7: search(); break;
+                case 8: display(); break;
+                case 9: break;
+                default: cout << "Invalido\n";
+            }
+        }
+    }
+}
+#endif
