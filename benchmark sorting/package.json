@@ -1,0 +1,17 @@
+{
+  "name": "proyecto-sorting",
+  "version": "1.0.0",
+  "description": "Comparador didáctico de algoritmos de ordenamiento",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "open": "^10.2.0",
+    "readline-sync": "^1.4.10",
+    "ws": "^8.18.3"
+  },
+  "author": "",
+  "license": "ISC"
+}
