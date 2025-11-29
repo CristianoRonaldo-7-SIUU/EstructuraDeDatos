@@ -15,7 +15,6 @@ public class RenderService
         // Regla 3 y 5: Mostrar Vidas, Puntos y Tiempos
         string timeLevel = (state.TimeThisLevel).ToString(@"hh\:mm\:ss");
         
-        // CORRECCIÓN:
         // El tiempo de Dificultad es el tiempo ya acumulado en esa dificultad + el tiempo del nivel actual
         string timeDiff = (state.TimeThisDifficulty + state.TimeThisLevel).ToString(@"hh\:mm\:ss");
         // El tiempo Total es el tiempo de todas las dificultades pasadas + el tiempo del nivel actual
@@ -136,7 +135,6 @@ public class RenderService
         if (state.SelectedQuadrant == 0)
         {
             // Modo normal: mostrar números 1-9
-            // Usamos la lógica MEJORADA para ver si el cuadrante está completo
             if (IsQuadrantComplete(state, quadrantIndex, solutions, puzzleIndex))
             {
                 Console.ForegroundColor = ConsoleColor.Cyan;
@@ -172,7 +170,6 @@ public class RenderService
         Console.ForegroundColor = originalColor;
     }
 
-    // --- LÓGICA MEJORADA ---
     private bool IsQuadrantComplete(GameState state, int quadrantIndex, int[,,] solutions, int puzzleIndex)
     {
         int quadrant = quadrantIndex - 1;
@@ -192,4 +189,5 @@ public class RenderService
         }
         return true;
     }
+
 }
