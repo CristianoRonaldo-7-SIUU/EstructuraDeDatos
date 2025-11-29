@@ -41,7 +41,6 @@ function printBoard(board, previewCells = []) {
   process.stdout.write('\n');
 
   for (let r = 0; r < ROWS; r++) {
-    // aquí agregué la letra A–J al inicio de cada fila
     process.stdout.write(String.fromCharCode(65 + r) + '  ');
     for (let c = 0; c < COLS; c++) {
       process.stdout.write(' ' + display[r][c] + ' ');
@@ -246,3 +245,4 @@ function printBoardWithHeader(board, playerName) {
   }
 
 })();
+
