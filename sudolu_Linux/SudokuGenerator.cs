@@ -112,7 +112,6 @@ public class SudokuGenerator
     private int[,] ShuffleGrid(int[,] grid)
     {
         int[,] shuffled = (int[,])grid.Clone();
-        // Shuffle rows within bands
         for (int band = 0; band < 3; band++)
         {
             var rows = new List<int> { 0, 1, 2 };
@@ -127,12 +126,10 @@ public class SudokuGenerator
             }
             shuffled = temp;
         }
-        // Shuffle bands
         var bands = new List<int> { 0, 1, 2 };
         Shuffle(bands);
         shuffled = RearrangeBands(shuffled, bands);
         shuffled = Transpose(shuffled);
-        // More shuffling after transpose
         for (int band = 0; band < 3; band++)
         {
             var rows = new List<int> { 0, 1, 2 };
@@ -179,11 +176,9 @@ public class SudokuGenerator
 
     private bool IsSafe(int[,] grid, int row, int col, int value)
     {
-        // Check row and column
         for (int i = 0; i < N; i++)
             if (grid[row, i] == value || grid[i, col] == value)
                 return false;
-        // Check 3x3 box
         int boxRow = row / 3 * 3;
         int boxCol = col / 3 * 3;
         for (int i = 0; i < 3; i++)
@@ -254,4 +249,5 @@ public class SudokuGenerator
         Backtrack(copy);
         return Math.Min(found, limit);
     }
+
 }
