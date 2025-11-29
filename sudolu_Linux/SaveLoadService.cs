@@ -34,8 +34,6 @@ public class SaveLoadService
             CurrentScore = state.CurrentScore,
             TotalCorrectMoves = state.TotalCorrectMoves,
             TotalIncorrectMoves = state.TotalIncorrectMoves,
-            
-            // NUEVO: Guardar la lista de tiempos
             LevelCompletionTimes = state.LevelCompletionTimes
         };
 
@@ -87,7 +85,6 @@ public class SaveLoadService
         if (saveData.IsGiven != null)
             state.IsGiven = ConvertToMultiArray(saveData.IsGiven);
 
-        // Nuevas propiedades
         state.LivesAtLevelStart = saveData.LivesAtLevelStart;
         state.MaxLivesAchieved = saveData.MaxLivesAchieved;
         state.LostLifeThisDifficulty = saveData.LostLifeThisDifficulty;
@@ -98,8 +95,6 @@ public class SaveLoadService
         state.CurrentScore = saveData.CurrentScore;
         state.TotalCorrectMoves = saveData.TotalCorrectMoves;
         state.TotalIncorrectMoves = saveData.TotalIncorrectMoves;
-
-        // NUEVO: Cargar la lista de tiempos
         state.LevelCompletionTimes = saveData.LevelCompletionTimes ?? new List<TimeSpan>();
 
         // Reiniciar estado de puzzle (se carga inactivo)
@@ -107,7 +102,7 @@ public class SaveLoadService
         state.PuzzleStartTime = null;
     }
 
-    // --- Métodos ayudantes de conversión (Sin Cambios) ---
+    // --- Métodos ayudantes de conversión ---
 
     private int[][] ConvertToJaggedArray(int[,] multiArray)
     {
@@ -163,4 +158,5 @@ public class SaveLoadService
         }
         return multiArray;
     }
+
 }
