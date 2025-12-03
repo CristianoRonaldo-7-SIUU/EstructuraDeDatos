@@ -50,19 +50,15 @@ private:
         return partes;
     }
 
-    // --- NUEVO: Función auxiliar recursiva para buscar ---
     void buscarRecursivo(Node* nodo, string nombreBuscado, string rutaActual, bool &encontrado) {
         if (nodo == NULL) return;
 
-        // Verificamos si el nombre coincide
         if (nodo->nombre == nombreBuscado) {
             cout << "✓ Encontrado en: " << rutaActual << endl;
             encontrado = true;
         }
 
-        // Recorremos los hijos recursivamente
         for (size_t i = 0; i < nodo->children.size(); i++) {
-            // Construimos la ruta para el hijo actual
             string nuevaRuta = rutaActual + "/" + nodo->children[i]->nombre;
             buscarRecursivo(nodo->children[i], nombreBuscado, nuevaRuta, encontrado);
         }
@@ -75,12 +71,9 @@ public:
         siguienteId = 1;
     }
 
-    // --- NUEVO: Función pública search/find ---
     void find(string nombreBuscado) {
         bool encontrado = false;
         
-        // Iniciamos la búsqueda desde la raíz
-        // La ruta inicial es "root" (o podrías poner "/" si prefieres)
         buscarRecursivo(root, nombreBuscado, "root", encontrado);
 
         if (!encontrado) {
@@ -295,4 +288,5 @@ int main(){
     } while(operacion != "salir");
 
     return 0;
+
 }
