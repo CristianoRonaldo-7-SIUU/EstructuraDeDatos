@@ -1,0 +1,14 @@
+/home/khabib/Desktop/snake/bin/Debug/net8.0/SnakeGame
+/home/khabib/Desktop/snake/bin/Debug/net8.0/SnakeGame.deps.json
+/home/khabib/Desktop/snake/bin/Debug/net8.0/SnakeGame.runtimeconfig.json
+/home/khabib/Desktop/snake/bin/Debug/net8.0/SnakeGame.dll
+/home/khabib/Desktop/snake/bin/Debug/net8.0/SnakeGame.pdb
+/home/khabib/Desktop/snake/obj/Debug/net8.0/SnakeGame.GeneratedMSBuildEditorConfig.editorconfig
+/home/khabib/Desktop/snake/obj/Debug/net8.0/SnakeGame.AssemblyInfoInputs.cache
+/home/khabib/Desktop/snake/obj/Debug/net8.0/SnakeGame.AssemblyInfo.cs
+/home/khabib/Desktop/snake/obj/Debug/net8.0/SnakeGame.csproj.CoreCompileInputs.cache
+/home/khabib/Desktop/snake/obj/Debug/net8.0/SnakeGame.dll
+/home/khabib/Desktop/snake/obj/Debug/net8.0/refint/SnakeGame.dll
+/home/khabib/Desktop/snake/obj/Debug/net8.0/SnakeGame.pdb
+/home/khabib/Desktop/snake/obj/Debug/net8.0/SnakeGame.genruntimeconfig.cache
+/home/khabib/Desktop/snake/obj/Debug/net8.0/ref/SnakeGame.dll
