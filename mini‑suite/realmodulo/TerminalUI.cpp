@@ -25,10 +25,10 @@ void TerminalUI::help() {
     cout << "- search / find   : Busca un nodo por nombre." << endl;
     cout << "- mv              : Mueve un archivo/carpeta de ubicación." << endl;
     cout << "- rm              : Elimina un archivo/carpeta (con confirmación)." << endl;
-    cout << "- rename          : Renombra archivo/carpeta (funciona con find)." << endl; // NUEVO
-    cout << "- cat             : Lee contenido de archivo." << endl; // NUEVO
-    cout << "- cat >           : Sobreescribe contenido." << endl; // NUEVO
-    cout << "- cat >>          : Agrega contenido." << endl; // NUEVO
+    cout << "- rename          : Renombra archivo/carpeta (funciona con find)." << endl; 
+    cout << "- cat             : Lee contenido de archivo." << endl; 
+    cout << "- cat >           : Sobreescribe contenido." << endl; 
+    cout << "- cat >>          : Agrega contenido." << endl; 
     cout << "- /help           : Muestra esta ayuda." << endl;
     cout << "- salir           : Cierra el programa." << endl;
     cout << "----------------------------" << endl;
@@ -114,12 +114,14 @@ void TerminalUI::iniciar() {
             }
             cout << endl;
         }
-        //rename y cat
+        // ***************************
         else if (operacion == "rename") {
             string nombre = "";
             string nuevoNombre = "";
             cout << "Introduce un archivo o carpeta: ";
-            getline(cin, nombre);
+            // USAMOS TABRUTA PARA AUTOCOMPLETAR EL ARCHIVO A RENOMBRAR
+            nombre = tabruta::leerRuta(core);
+            
             cout << "Nuevo nombre de " << nombre << ": ";
             getline(cin, nuevoNombre);
             cout << core.renameNode(nombre, nuevoNombre) << endl;
@@ -128,9 +130,9 @@ void TerminalUI::iniciar() {
         else if (operacion == "cat") {
             string nombre = "";
             cout << "Nombre del archivo a leer: ";
-            getline(cin, nombre);
+            nombre = tabruta::leerRuta(core);
+            
             string contenido = core.catRead(nombre);
-            // Comprobar si es un error para formatear salida
             if (contenido.substr(0, 2) == "X ") {
                 cout << contenido << endl;
             } else {
@@ -142,7 +144,8 @@ void TerminalUI::iniciar() {
             string nombre = "";
             string contenido = "";
             cout << "Nombre del archivo a reemplazar: ";
-            getline(cin, nombre);
+            nombre = tabruta::leerRuta(core);
+            
             cout << "Nuevo contenido de " << nombre << ": ";
             getline(cin, contenido);
             cout << core.catOverwrite(nombre, contenido) << endl;
@@ -152,7 +155,8 @@ void TerminalUI::iniciar() {
             string nombre = "";
             string contenido = "";
             cout << "Archivo al que quieras incluir texto: ";
-            getline(cin, nombre);
+            nombre = tabruta::leerRuta(core);
+            
             cout << "Contenido a incluir en " << nombre << ": ";
             getline(cin, contenido);
             cout << core.catAppend(nombre, contenido) << endl;
